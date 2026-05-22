@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>For Joy · A 30th Birthday Journey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #1a0c2e;
+            --bg-card: rgba(30, 14, 50, 0.65);
+            --gold: #d4a853;
+            --gold-bright: #f0d078;
+            --gold-pale: #fdf0d0;
+            --rose: #e8a0b4;
+            --rose-soft: #f5c6d4;
+            --rose-deep: #c06070;
+            --lavender: #b8a0d4;
+            --cream: #fdf5ec;
+            --text-primary: #fef8f0;
+            --text-secondary: #e8d8c8;
+            --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-gold: 0 0 40px rgba(212, 168, 83, 0.35);
+            --radius-lg: 28px;
+            --radius-md: 20px;
+            --radius-sm: 14px;
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+            --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-smooth: cubic-bezier(0.4, 0.0, 0.2, 1);
+            --ease-spring: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            font-size: 16px;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            overscroll-behavior: none;
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: var(--font-body);
+            background: radial-gradient(ellipse at 50% 25%, #2d1648 0%, #140a26 55%, #0c0418 100%);
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            user-select: none;
+            -webkit-user-select: none;
+            position: relative;
+            transition: background 1.6s ease;
+        }
+        body.stage-3-bg {
+            background: radial-gradient(ellipse at 50% 30%, #352050 0%, #1a0e30 55%, #0e061c 100%);
+        }
+        body.stage-5-bg {
+            background: radial-gradient(ellipse at 50% 28%, #3e2658 0%, #1c0f32 50%, #0f0720 100%);
+        }
+
+        /* ── Ambient Particles ── */
+        .ambient-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .ambient-dot {
+            position: absolute;
+            border-radius: 50%;
+            animation: ambientFloat var(--dur) var(--delay) infinite linear;
+            opacity: 0;
+            will-change: transform, opacity;
+            box-shadow: 0 0 var(--glow) var(--glow-spread) var(--dot-color);
+        }
+        @keyframes ambientFloat {
+            0% {
+                transform: translateY(105vh) translateX(0) scale(0.3);
+                opacity: 0;
+            }
+            6% {
+                opacity: var(--max-opacity);
+            }
+            70% {
+                opacity: var(--max-opacity);
+            }
+            92% {
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(-15vh) translateX(var(--drift)) scale(1.1);
+                opacity: 0;
+            }
+        }
+
+        /* ── Audio Toggle ── */
+        .audio-toggle {
+            position: fixed;
+            top: 2rem;
+            right: 1.5rem;
+            z-index: 100;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1.5px solid rgba(212, 168, 83, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.35s var(--ease-bounce);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .audio-toggle:active {
+            transform: scale(0.88);
+            border-color: var(--gold-bright);
+        }
+        .audio-toggle.playing {
+            border-color: var(--gold-bright);
+            box-shadow: 0 0 22px rgba(240, 208, 120, 0.5), 0 4px 18px rgba(0, 0, 0, 0.35);
+        }
+        .audio-icon {
+            font-size: 1.2rem;
+            pointer-events: none;
+            transition: transform 0.4s var(--ease-bounce);
+        }
+        .audio-toggle.playing .audio-icon {
+            animation: musicPulse 1.4s ease-in-out infinite;
+        }
+        @keyframes musicPulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.25);
+            }
+        }
+        .audio-label-tooltip {
+            position: absolute;
+            right: 52px;
+            background: rgba(20, 10, 40, 0.85);
+            color: var(--gold-pale);
+            font-family: var(--font-body);
+            font-size: 0.7rem;
+            letter-spacing: 0.05em;
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateX(8px);
+            transition: all 0.35s var(--ease-smooth);
+        }
+        .audio-toggle:hover .audio-label-tooltip,
+        .audio-toggle:active .audio-label-tooltip {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ── Main Container ── */
+        .main-container {
+            width: 100%;
+            max-width: 440px;
+            height: 100vh;
+            height: 100dvh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            z-index: 10;
+            touch-action: manipulation;
+        }
+
+        /* ── Progress Constellation ── */
+        .constellation {
+            position: fixed;
+            top: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            z-index: 50;
+            pointer-events: none;
+        }
+        .constellation .star-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #3d2a58;
+            position: relative;
+            transition: all 0.7s var(--ease-bounce);
+        }
+        .constellation .star-dot.lit {
+            background: var(--gold-bright);
+            box-shadow: 0 0 14px var(--gold-bright), 0 0 28px rgba(240, 208, 120, 0.6);
+            animation: starTwinkle 2s ease-in-out infinite;
+            width: 9px;
+            height: 9px;
+        }
+        .constellation .star-dot.lit.current-star {
+            background: var(--rose);
+            box-shadow: 0 0 20px var(--rose), 0 0 36px rgba(232, 160, 180, 0.7);
+            animation: starTwinkle 1.2s ease-in-out infinite;
+            width: 10px;
+            height: 10px;
+        }
+        .constellation .connector {
+            width: 1rem;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(212, 168, 83, 0.35), transparent);
+            transition: all 0.7s ease;
+        }
+        .constellation .star-dot:last-child+.connector {
+            display: none;
+        }
+        @keyframes starTwinkle {
+            0%,
+            100% {
+                box-shadow: 0 0 14px currentColor, 0 0 28px currentColor;
+            }
+            50% {
+                box-shadow: 0 0 24px currentColor, 0 0 44px currentColor, 0 0 60px rgba(240, 208, 120, 0.5);
+            }
+        }
+
+        /* ── Companion Glow ── */
+        .companion {
+            position: fixed;
+            bottom: 3.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 240, 200, 0.9) 0%, rgba(240, 180, 120, 0.5) 50%, transparent 70%);
+            box-shadow: 0 0 30px rgba(240, 200, 140, 0.7), 0 0 60px rgba(232, 160, 180, 0.4);
+            z-index: 40;
+            pointer-events: none;
+            transition: all 0.7s var(--ease-bounce);
+            animation: companionBreathe 2.4s ease-in-out infinite;
+        }
+        @keyframes companionBreathe {
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0) scale(1);
+                opacity: 0.8;
+            }
+            30% {
+                transform: translateX(-50%) translateY(-10px) scale(1.35);
+                opacity: 1;
+            }
+            60% {
+                transform: translateX(-50%) translateY(-3px) scale(1.08);
+                opacity: 0.9;
+            }
+        }
+        .companion.celebrating {
+            animation: companionCelebrate 0.7s var(--ease-bounce) forwards;
+        }
+        @keyframes companionCelebrate {
+            0% {
+                transform: translateX(-50%) translateY(0) scale(1);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-30px) scale(2.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-50%) translateY(-20px) scale(1);
+                opacity: 0.85;
+            }
+        }
+
+        /* ── Stages ── */
+        .stage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s var(--ease-smooth), transform 0.6s var(--ease-bounce);
+            transform: scale(0.88) translateY(18px);
+            z-index: 20;
+        }
+        .stage.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1) translateY(0);
+        }
+        .stage.exit-stage {
+            opacity: 0;
+            transform: scale(0.9) translateY(-20px);
+            transition: opacity 0.35s ease-in, transform 0.45s ease-in;
+            pointer-events: none;
+        }
+
+        /* ── Candle Stage ── */
+        .candle-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.35s var(--ease-bounce);
+            -webkit-tap-highlight-color: transparent;
+        }
+        .candle-wrapper:active {
+            transform: scale(0.9);
+        }
+        .candle-aura {
+            position: absolute;
+            top: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 170px;
+            height: 210px;
+            background: radial-gradient(ellipse at center, rgba(240, 180, 100, 0.45) 0%, transparent 68%);
+            border-radius: 50%;
+            animation: auraPulse 3s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+        @keyframes auraPulse {
+            0%,
+            100% {
+                transform: translateX(-50%) scale(1);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateX(-50%) scale(1.35);
+                opacity: 1;
+            }
+        }
+        .candle-body {
+            width: 46px;
+            height: 85px;
+            background: linear-gradient(180deg, #fef8f2 0%, #f5e8d8 38%, #e8d4bb 100%);
+            border-radius: 8px 8px 4px 4px;
+            position: relative;
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.7);
+            z-index: 5;
+        }
+        .candle-body::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 7px;
+            right: 7px;
+            height: 1px;
+            background: rgba(180, 135, 90, 0.3);
+            box-shadow: 0 18px 0 rgba(180, 135, 90, 0.22), 0 36px 0 rgba(180, 135, 90, 0.18);
+            border-radius: 1px;
+        }
+        .candle-wick {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 15px;
+            background: #1a0f08;
+            border-radius: 1px;
+            z-index: 7;
+        }
+        .flame-outer {
+            position: absolute;
+            top: -46px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 22px;
+            height: 36px;
+            background: #f09050;
+            border-radius: 50% 50% 50% 50% / 60% 60% 35% 35%;
+            animation: flickerO 0.22s ease-in-out infinite alternate;
+            filter: blur(1.5px);
+            opacity: 0.85;
+            z-index: 8;
+            pointer-events: none;
+        }
+        .flame-mid {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 26px;
+            background: #fcc070;
+            border-radius: 50% 50% 50% 50% / 60% 60% 35% 35%;
+            animation: flickerM 0.18s ease-in-out infinite alternate;
+            z-index: 9;
+            pointer-events: none;
+        }
+        .flame-inner {
+            position: absolute;
+            top: -34px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 9px;
+            height: 17px;
+            background: #fff9e8;
+            border-radius: 50% 50% 50% 50% / 60% 60% 35% 35%;
+            animation: flickerI 0.14s ease-in-out infinite alternate;
+            z-index: 10;
+            pointer-events: none;
+            box-shadow: 0 0 22px 10px rgba(255, 245, 200, 0.85);
+        }
+        @keyframes flickerO {
+            0% {
+                transform: translateX(-50%) scaleX(1) scaleY(1) rotate(-1.5deg);
+            }
+            100% {
+                transform: translateX(-50%) scaleX(1.14) scaleY(1.07) rotate(2deg);
+            }
+        }
+        @keyframes flickerM {
+            0% {
+                transform: translateX(-50%) scaleX(1) scaleY(1) rotate(1deg);
+            }
+            100% {
+                transform: translateX(-50%) scaleX(1.09) scaleY(1.05) rotate(-1deg);
+            }
+        }
+        @keyframes flickerI {
+            0% {
+                transform: translateX(-50%) scaleX(1) scaleY(1);
+                opacity: 0.85;
+            }
+            100% {
+                transform: translateX(-50%) scaleX(1.05) scaleY(1.09);
+                opacity: 1;
+            }
+        }
+        .candle-base {
+            width: 66px;
+            height: 15px;
+            background: linear-gradient(180deg, #d4a85c 0%, #b8883e 100%);
+            border-radius: 50%;
+            margin-top: -3px;
+            z-index: 4;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55), 0 0 18px rgba(240, 180, 100, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .candle-label {
+            margin-top: 1.6rem;
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            color: var(--gold-pale);
+            letter-spacing: 0.08em;
+            text-align: center;
+            animation: labelPulse 2.6s ease-in-out infinite;
+            pointer-events: none;
+            font-style: italic;
+        }
+        @keyframes labelPulse {
+            0%,
+            100% {
+                opacity: 0.45;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        /* ── Story Card ── */
+        .story-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 1.5px solid rgba(212, 168, 83, 0.25);
+            border-radius: var(--radius-lg);
+            padding: 2rem 1.6rem;
+            text-align: center;
+            max-width: 380px;
+            width: 100%;
+            box-shadow: var(--shadow-card);
+            transition: all 0.5s var(--ease-bounce);
+            position: relative;
+            overflow: hidden;
+        }
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(240, 208, 120, 0.08) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .story-card .stage-number {
+            font-family: var(--font-display);
+            font-size: 0.68rem;
+            letter-spacing: 0.22em;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 1.3rem;
+            opacity: 0.8;
+        }
+        .story-card .stage-text {
+            font-family: var(--font-body);
+            font-size: 1.18rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            letter-spacing: 0.03em;
+            font-weight: 400;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
+        }
+        .story-card .stage-text .highlight {
+            color: var(--gold-bright);
+            font-weight: 500;
+            font-style: italic;
+        }
+        .story-card .stage-text .name-glow {
+            display: inline-block;
+            font-family: var(--font-display);
+            font-weight: 700;
+            background: linear-gradient(135deg, #f5c6d4, #f0d078, #e8a0b4);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: nameShimmer 3.2s ease-in-out infinite;
+        }
+        @keyframes nameShimmer {
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+        .story-card .stage-cta {
+            margin-top: 1.6rem;
+            font-size: 0.78rem;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            animation: ctaPulse 2s ease-in-out infinite;
+            pointer-events: none;
+            font-family: var(--font-display);
+            font-style: italic;
+        }
+        @keyframes ctaPulse {
+            0%,
+            100% {
+                opacity: 0.35;
+            }
+            50% {
+                opacity: 0.9;
+            }
+        }
+
+        /* ── Final Stage ── */
+        .final-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            border: 1.5px solid rgba(212, 168, 83, 0.35);
+            border-radius: var(--radius-lg);
+            padding: 1.8rem 1.5rem;
+            text-align: center;
+            max-width: 390px;
+            width: 100%;
+            box-shadow: var(--shadow-card), var(--shadow-gold);
+            animation: cardReveal 1s var(--ease-bounce) forwards;
+            opacity: 0;
+            transform: translateY(24px);
+        }
+        @keyframes cardReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .final-heading {
+            font-family: var(--font-display);
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.04em;
+            line-height: 1.3;
+            text-shadow: 0 0 36px rgba(240, 208, 120, 0.55);
+        }
+        .final-subtitle {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            color: var(--gold-pale);
+            margin-top: 0.6rem;
+            font-style: italic;
+        }
+        .final-message-scroll {
+            margin-top: 1.4rem;
+            max-height: 32vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold) rgba(0, 0, 0, 0.2);
+            padding-right: 6px;
+        }
+        .final-message-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .final-message-scroll::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 4px;
+        }
+        .final-message-scroll p {
+            font-size: 0.92rem;
+            line-height: 1.75;
+            color: var(--text-secondary);
+            margin-bottom: 0.7rem;
+        }
+        .final-cta {
+            margin-top: 1.2rem;
+            font-size: 0.78rem;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            animation: ctaPulse 2s ease-in-out infinite;
+            pointer-events: none;
+            font-family: var(--font-display);
+            font-style: italic;
+        }
+
+        /* ── Ripple Effect ── */
+        .ripple {
+            position: fixed;
+            border-radius: 50%;
+            background: rgba(240, 208, 120, 0.35);
+            pointer-events: none;
+            z-index: 200;
+            animation: rippleOut 0.7s ease-out forwards;
+        }
+        @keyframes rippleOut {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.9;
+            }
+            100% {
+                width: 120px;
+                height: 120px;
+                margin-left: -60px;
+                margin-top: -60px;
+                opacity: 0;
+            }
+        }
+
+        /* ── Sparkle Pop ── */
+        .sparkle-pop {
+            position: fixed;
+            pointer-events: none;
+            z-index: 220;
+            animation: sparkleFly 0.85s ease-out forwards;
+            font-size: 1.2rem;
+        }
+        @keyframes sparkleFly {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 1;
+            }
+            45% {
+                transform: translate(var(--sx), var(--sy)) scale(1.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--ex), var(--ey)) scale(0.15);
+                opacity: 0;
+            }
+        }
+
+        /* ── Confetti Canvas ── */
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 300;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 370px) {
+            .story-card .stage-text {
+                font-size: 1.05rem;
+                line-height: 1.65;
+            }
+            .final-heading {
+                font-size: 1.7rem;
+            }
+            .candle-body {
+                width: 40px;
+                height: 72px;
+            }
+            .story-card {
+                padding: 1.5rem 1.2rem;
+            }
+        }
+        @media (min-width: 420px) {
+            .story-card .stage-text {
+                font-size: 1.28rem;
+                line-height: 1.85;
+            }
+            .final-heading {
+                font-size: 2.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Particle Layer -->
+    <div class="ambient-layer" id="ambientLayer" aria-hidden="true"></div>
+
+    <!-- Audio Toggle -->
+    <div class="audio-toggle" id="audioToggle" role="button" aria-label="Toggle music" title="Tap to play soft piano">
+        <span class="audio-icon">🎵</span>
+        <span class="audio-label-tooltip">soft piano</span>
+    </div>
+    <!-- Hidden Audio Element -->
+    <!--
+        🎵 Suggested Audio Track:
+        "Canon in D Major" by Johann Pachelbel (soft piano arrangement)
+        or "Clair de Lune" by Claude Debussy
+        or Royalty-free: "Inspiring Soft Piano" from Pixabay / Uppbeat
+
+        Replace the src below with your chosen audio file path.
+        For local testing, place an .mp3 file next to this HTML and update the src.
+    -->
+    <audio id="bgAudio" loop preload="auto" style="display:none;">
+        <source src="My Wish - Rascal Flatts" type="audio/mp3">
+    </audio>
+
+    <!-- Companion Glow -->
+    <div class="companion" id="companion" aria-hidden="true"></div>
+
+    <!-- Progress Constellation -->
+    <div class="constellation" id="constellation" aria-hidden="true">
+        <span class="star-dot lit current-star" data-index="0"></span><span class="connector"></span>
+        <span class="star-dot" data-index="1"></span><span class="connector"></span>
+        <span class="star-dot" data-index="2"></span><span class="connector"></span>
+        <span class="star-dot" data-index="3"></span><span class="connector"></span>
+        <span class="star-dot" data-index="4"></span><span class="connector"></span>
+        <span class="star-dot" data-index="5"></span>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container" id="mainContainer">
+
+        <!-- Stage 0: Candle -->
+        <div class="stage active" id="stage0" data-stage="0">
+            <div class="candle-wrapper" id="candleWrapper">
+                <div class="candle-aura"></div>
+                <div class="flame-outer"></div>
+                <div class="flame-mid"></div>
+                <div class="flame-inner"></div>
+                <div class="candle-wick"></div>
+                <div class="candle-body"></div>
+                <div class="candle-base"></div>
+                <p class="candle-label">tap the flame to begin</p>
+            </div>
+        </div>
+
+        <!-- Stage 1 -->
+        <div class="stage" id="stage1" data-stage="1">
+            <div class="story-card">
+                <p class="stage-number">· seeds of faith ·</p>
+                <p class="stage-text">
+                    Today is the day you were brought into the world, and truly, <span class="highlight">God has been faithful</span> to you every step of the way. Through every season, every high and low, He has kept you, carried you, provided for you, and covered you with grace.
+                </p>
+                <p class="stage-text" style="margin-top:0.7rem;">
+                    <span class="highlight">He hasn't failed you, and He never will.</span>
+                </p>
+                <p class="stage-cta">tap anywhere to continue</p>
+            </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="stage" id="stage2" data-stage="2">
+            <div class="story-card">
+                <p class="stage-number">· blossoming grace ·</p>
+                <p class="stage-text">
+                    You're not just growing older — you're <span class="highlight">growing stronger, wiser, softer in heart, and more beautiful in spirit.</span> There's something special about the way you move through life.
+                </p>
+                <p class="stage-text" style="margin-top:0.7rem;">
+                    I pray this new decade brings you the kind of peace, love, fulfillment, and joy that <span class="highlight">reaches deep into your soul.</span>
+                </p>
+                <p class="stage-cta">tap anywhere to continue</p>
+            </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="stage" id="stage3" data-stage="3">
+            <div class="story-card">
+                <p class="stage-number">· golden petals ·</p>
+                <p class="stage-text">
+                    <span class="highlight" style="font-size:1.3rem;">30 looks good on you,</span> <span class="name-glow">Joy</span>.
+                </p>
+                <p class="stage-text" style="margin-top:0.7rem;">
+                    Not because of the number, but because of <span class="highlight">the woman you're becoming.</span>
+                </p>
+                <p class="stage-cta">tap anywhere to continue</p>
+            </div>
+        </div>
+
+        <!-- Stage 4 -->
+        <div class="stage" id="stage4" data-stage="4">
+            <div class="story-card">
+                <p class="stage-number">· radiant bloom ·</p>
+                <p class="stage-text">
+                    You're <span class="highlight">conquering</span>, <span class="name-glow">Joy</span>, and I believe the <span class="highlight">best parts of your story are still ahead.</span>
+                </p>
+                <p class="stage-cta">one more tap...</p>
+            </div>
+        </div>
+
+        <!-- Stage 5: Finale -->
+        <div class="stage" id="stage5" data-stage="5">
+            <div class="final-card">
+                <h2 class="final-heading">Happy big 30,<br><span class="name-glow" style="font-size:2.5rem;">Joy</span></h2>
+                <p class="final-subtitle">The best is yet to come.</p>
+                <div class="final-message-scroll">
+                    <p>Today is the day you were brought into the world, and truly, God has been faithful to you every step of the way. Through every season, every high and low, He has kept you, carried you, provided for you, and covered you with grace. He hasn't failed you, and He never will.</p>
+                    <p>You're not just growing older — you're growing stronger, wiser, softer in heart, and more beautiful in spirit. There's something special about the way you move through life, and I pray this new decade brings you the kind of peace, love, fulfillment, and joy that reaches deep into your soul.</p>
+                    <p>30 looks good on you, Joy. Not because of the number, but because of the woman you're becoming.</p>
+                    <p>You're conquering, Joy, and I believe the best parts of your story are still ahead.</p>
+                    <p style="font-weight:600; color:#f0d078;">Happy big 30, Joy. With all my heart.</p>
+                </div>
+                <p class="final-cta">tap for more celebration</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+
+    <script>
+        (function() {
+            // ────────────────────────────────────
+            // DOM References
+            // ────────────────────────────────────
+            const ambientLayer = document.getElementById('ambientLayer');
+            const audioToggle = document.getElementById('audioToggle');
+            const bgAudio = document.getElementById('bgAudio');
+            const companion = document.getElementById('companion');
+            const constellation = document.getElementById('constellation');
+            const confettiCanvas = document.getElementById('confetti-canvas');
+            const ctx = confettiCanvas.getContext('2d');
+            const mainContainer = document.getElementById('mainContainer');
+            const candleWrapper = document.getElementById('candleWrapper');
+            const stages = document.querySelectorAll('.stage');
+            const allStars = constellation.querySelectorAll('.star-dot');
+
+            let currentStage = 0;
+            let isTransitioning = false;
+            const totalStages = stages.length;
+            let audioInitialized = false;
+            let confettiPieces = [];
+            let confettiActive = false;
+            let animationFrameId = null;
+
+            // ────────────────────────────────────
+            // Canvas Resize
+            // ────────────────────────────────────
+            function resizeCanvas() {
+                confettiCanvas.width = window.innerWidth;
+                confettiCanvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            // ────────────────────────────────────
+            // Ambient Particles
+            // ────────────────────────────────────
+            const dotColors = [
+                'rgba(240,208,120,0.7)', 'rgba(232,160,180,0.6)', 'rgba(184,160,212,0.55)',
+                'rgba(255,220,160,0.65)', 'rgba(245,198,212,0.6)', 'rgba(212,168,131,0.5)'
+            ];
+
+            function createAmbientDot() {
+                const dot = document.createElement('div');
+                dot.classList.add('ambient-dot');
+                const size = Math.random() * 4 + 1.5;
+                const color = dotColors[Math.floor(Math.random() * dotColors.length)];
+                const left = Math.random() * 94;
+                const duration = Math.random() * 11 + 8;
+                const delay = Math.random() * 10;
+                const drift = (Math.random() - 0.5) * 70;
+                const maxOpacity = Math.random() * 0.5 + 0.25;
+                const glow = size + 3;
+                dot.style.cssText = `
+                    width:${size}px; height:${size}px;
+                    background:${color};
+                    left:${left}%;
+                    bottom:-15px;
+                    --dur:${duration}s;
+                    --delay:-${delay}s;
+                    --drift:${drift}px;
+                    --max-opacity:${maxOpacity};
+                    --dot-color:${color};
+                    --glow:${glow}px;
+                    --glow-spread:${glow*2}px;
+                `;
+                ambientLayer.appendChild(dot);
+                const lifespan = (duration + delay) * 1000;
+                setTimeout(() => {
+                    if (dot.parentNode) {
+                        dot.remove();
+                        createAmbientDot();
+                    }
+                }, lifespan + 600);
+            }
+            for (let i = 0; i < 40; i++) {
+                setTimeout(() => createAmbientDot(), i * 160);
+            }
+            setInterval(() => {
+                const count = ambientLayer.querySelectorAll('.ambient-dot').length;
+                if (count < 40) {
+                    for (let i = 0; i < 40 - count; i++) {
+                        setTimeout(() => createAmbientDot(), i * 180);
+                    }
+                }
+            }, 5000);
+
+            // ────────────────────────────────────
+            // Audio Toggle
+            // ────────────────────────────────────
+            audioToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (!audioInitialized) {
+                    bgAudio.play().then(() => {
+                        audioInitialized = true;
+                        audioToggle.classList.add('playing');
+                        audioToggle.querySelector('.audio-label-tooltip').textContent = 'playing';
+                    }).catch(() => {
+                        // Autoplay blocked; user needs to interact again
+                        audioToggle.classList.remove('playing');
+                        audioToggle.querySelector('.audio-label-tooltip').textContent =
+                            'tap to try again';
+                    });
+                } else {
+                    if (bgAudio.paused) {
+                        bgAudio.play();
+                        audioToggle.classList.add('playing');
+                        audioToggle.querySelector('.audio-label-tooltip').textContent = 'playing';
+                    } else {
+                        bgAudio.pause();
+                        audioToggle.classList.remove('playing');
+                        audioToggle.querySelector('.audio-label-tooltip').textContent = 'paused';
+                    }
+                }
+                // Bounce animation feedback
+                audioToggle.style.transform = 'scale(0.82)';
+                setTimeout(() => { audioToggle.style.transform = ''; }, 200);
+            });
+
+            // ────────────────────────────────────
+            // Companion Celebration
+            // ────────────────────────────────────
+            function celebrateCompanion() {
+                companion.classList.add('celebrating');
+                setTimeout(() => companion.classList.remove('celebrating'), 750);
+            }
+
+            // ────────────────────────────────────
+            // Constellation Update
+            // ────────────────────────────────────
+            function updateConstellation() {
+                allStars.forEach((star, index) => {
+                    star.classList.remove('lit', 'current-star');
+                    if (index <= currentStage) {
+                        star.classList.add('lit');
+                    }
+                    if (index === currentStage) {
+                        star.classList.add('current-star');
+                    }
+                });
+            }
+
+            // ────────────────────────────────────
+            // Ripple Effect
+            // ────────────────────────────────────
+            function spawnRipple(x, y) {
+                const ripple = document.createElement('div');
+                ripple.classList.add('ripple');
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                document.body.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 750);
+            }
+
+            // ────────────────────────────────────
+            // Sparkle Pop
+            // ────────────────────────────────────
+            function spawnSparkles(x, y, count = 12) {
+                const symbols = ['✨', '💫', '⭐', '💛', '🌟', '🕊️', '🌸', '💖', '♡', '•'];
+                for (let i = 0; i < count; i++) {
+                    const sparkle = document.createElement('div');
+                    sparkle.classList.add('sparkle-pop');
+                    sparkle.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = Math.random() * 75 + 28;
+                    const sx = Math.cos(angle) * dist * 0.28;
+                    const sy = Math.sin(angle) * dist * 0.28 - 18;
+                    const ex = Math.cos(angle) * dist;
+                    const ey = Math.sin(angle) * dist - 28;
+                    sparkle.style.cssText = `
+                        left:${x}px;
+                        top:${y}px;
+                        --sx:${sx}px;
+                        --sy:${sy}px;
+                        --ex:${ex}px;
+                        --ey:${ey}px;
+                        font-size:${Math.random()*1.4+0.7}rem;
+                    `;
+                    document.body.appendChild(sparkle);
+                    setTimeout(() => sparkle.remove(), 900);
+                }
+            }
+
+            // ────────────────────────────────────
+            // Stage Transitions
+            // ────────────────────────────────────
+            function goToStage(targetStage) {
+                if (isTransitioning || targetStage === currentStage) return;
+                if (targetStage < 0 || targetStage >= totalStages) return;
+
+                isTransitioning = true;
+                celebrateCompanion();
+
+                const currentEl = document.getElementById(`stage${currentStage}`);
+                const targetEl = document.getElementById(`stage${targetStage}`);
+
+                if (currentEl) {
+                    currentEl.classList.add('exit-stage');
+                    currentEl.classList.remove('active');
+                }
+                if (targetEl) {
+                    targetEl.classList.remove('exit-stage');
+                    void targetEl.offsetWidth;
+                    targetEl.classList.add('active');
+                }
+
+                currentStage = targetStage;
+                updateConstellation();
+
+                document.body.classList.remove('stage-3-bg', 'stage-5-bg');
+                if (currentStage === 3) document.body.classList.add('stage-3-bg');
+                if (currentStage === 5) document.body.classList.add('stage-5-bg');
+
+                if (currentStage === 5) {
+                    startConfetti();
+                } else {
+                    stopConfetti();
+                }
+
+                setTimeout(() => {
+                    if (currentEl) currentEl.classList.remove('exit-stage');
+                    isTransitioning = false;
+                }, 650);
+            }
+
+            function advanceStage(e) {
+                if (isTransitioning) return;
+                const x = e && e.clientX ? e.clientX : window.innerWidth / 2;
+                const y = e && e.clientY ? e.clientY : window.innerHeight / 2;
+                spawnRipple(x, y);
+                if (currentStage < totalStages - 1) {
+                    spawnSparkles(x, y, currentStage === 4 ? 20 : 12);
+                    goToStage(currentStage + 1);
+                } else if (currentStage === totalStages - 1) {
+                    spawnSparkles(x, y, 22);
+                    burstConfetti();
+                    celebrateCompanion();
+                }
+            }
+
+            // ────────────────────────────────────
+            // Candle Handler
+            // ────────────────────────────────────
+            candleWrapper.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (isTransitioning || currentStage !== 0) return;
+                const rect = candleWrapper.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + 18;
+                spawnRipple(cx, cy);
+                spawnSparkles(cx, cy, 18);
+                setTimeout(() => spawnSparkles(cx, cy - 12, 12), 160);
+                goToStage(1);
+                // Attempt audio init on first interaction
+                if (!audioInitialized && bgAudio.paused) {
+                    bgAudio.play().then(() => {
+                        audioInitialized = true;
+                        audioToggle.classList.add('playing');
+                        audioToggle.querySelector('.audio-label-tooltip').textContent = 'playing';
+                    }).catch(() => {});
+                }
+            });
+
+            // ────────────────────────────────────
+            // Global Tap Handler
+            // ────────────────────────────────────
+            mainContainer.addEventListener('click', function(e) {
+                if (isTransitioning) return;
+                if (currentStage === 0) return;
+                if (e.target.closest('.candle-wrapper')) return;
+                advanceStage(e);
+                // Audio init on any tap
+                if (!audioInitialized && bgAudio.paused) {
+                    bgAudio.play().then(() => {
+                        audioInitialized = true;
+                        audioToggle.classList.add('playing');
+                        audioToggle.querySelector('.audio-label-tooltip').textContent = 'playing';
+                    }).catch(() => {});
+                }
+            });
+
+            document.body.addEventListener('click', function(e) {
+                if (isTransitioning) return;
+                if (currentStage === 0) return;
+                if (e.target.closest('.candle-wrapper') || e.target.closest('.main-container') || e.target
+                    .closest('.audio-toggle')) return;
+                if (currentStage >= 1 && currentStage < totalStages) {
+                    advanceStage(e);
+                }
+            });
+
+            // ────────────────────────────────────
+            // Confetti System
+            // ────────────────────────────────────
+            const confettiColors = [
+                '#f0d078', '#e8a0b4', '#b8a0d4', '#fdf0d0', '#ffd700',
+                '#f5c6d4', '#e6e6fa', '#ffdab9', '#fcc070', '#d4a853',
+                '#f09050', '#ffe4b5', '#ffb6c1', '#dda0dd',
+            ];
+
+            function createPiece() {
+                return {
+                    x: Math.random() * confettiCanvas.width,
+                    y: -25 - Math.random() * 70,
+                    w: Math.random() * 10 + 3,
+                    h: Math.random() * 7 + 2.5,
+                    color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+                    rotation: Math.random() * Math.PI * 2,
+                    rotSpeed: (Math.random() - 0.5) * 0.45,
+                    speedY: Math.random() * 2.8 + 1.4,
+                    speedX: (Math.random() - 0.5) * 2.2,
+                    swayFreq: Math.random() * 0.05 + 0.018,
+                    swayAmp: Math.random() * 45 + 18,
+                    opacity: Math.random() * 0.45 + 0.55,
+                    time: Math.random() * 100,
+                };
+            }
+
+            function startConfetti() {
+                confettiActive = true;
+                confettiPieces = [];
+                for (let i = 0; i < 140; i++) {
+                    const p = createPiece();
+                    p.y = Math.random() * confettiCanvas.height * 0.6;
+                    confettiPieces.push(p);
+                }
+                if (!animationFrameId) animateConfetti();
+            }
+
+            function burstConfetti() {
+                if (!confettiActive) {
+                    confettiActive = true;
+                    if (!animationFrameId) animateConfetti();
+                }
+                const cx = confettiCanvas.width / 2;
+                const cy = confettiCanvas.height * 0.38;
+                for (let i = 0; i < 55; i++) {
+                    const p = createPiece();
+                    p.x = cx + (Math.random() - 0.5) * 160;
+                    p.y = cy + (Math.random() - 0.5) * 70;
+                    p.speedY = -(Math.random() * 5.5 + 4);
+                    p.speedX = (Math.random() - 0.5) * 7;
+                    confettiPieces.push(p);
+                }
+            }
+
+            function stopConfetti() {
+                confettiActive = false;
+                setTimeout(() => {
+                    if (!confettiActive && confettiPieces.every(p => p.y > confettiCanvas.height +
+                            55)) {
+                        confettiPieces = [];
+                        if (animationFrameId) {
+                            cancelAnimationFrame(animationFrameId);
+                            animationFrameId = null;
+                        }
+                        ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                    }
+                }, 3200);
+            }
+
+            function animateConfetti() {
+                ctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                if (!confettiActive) {
+                    confettiPieces = confettiPieces.filter(p => p.y < confettiCanvas.height + 55);
+                    if (confettiPieces.length === 0) {
+                        animationFrameId = null;
+                        return;
+                    }
+                }
+                for (let i = confettiPieces.length - 1; i >= 0; i--) {
+                    const p = confettiPieces[i];
+                    p.time += 1;
+                    p.y += p.speedY;
+                    p.x += p.speedX + Math.sin(p.time * p.swayFreq) * p.swayAmp * 0.06;
+                    p.rotation += p.rotSpeed;
+                    p.speedY += 0.018;
+                    if (p.y > confettiCanvas.height + 70 || p.x < -70 || p.x > confettiCanvas.width + 70) {
+                        if (confettiActive) {
+                            const np = createPiece();
+                            np.y = -20 - Math.random() * 35;
+                            confettiPieces[i] = np;
+                        } else {
+                            confettiPieces.splice(i, 1);
+                        }
+                        continue;
+                    }
+                    ctx.save();
+                    ctx.globalAlpha = p.opacity;
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+                    ctx.fillRect(-p.w / 3.5, -p.h / 3, p.w / 3, p.h / 3.5);
+                    ctx.restore();
+                }
+                animationFrameId = requestAnimationFrame(animateConfetti);
+            }
+
+            // ────────────────────────────────────
+            // Init
+            // ────────────────────────────────────
+            updateConstellation();
+            resizeCanvas();
+            window.addEventListener('orientationchange', () => setTimeout(resizeCanvas, 400));
+
+            // Keyboard nav
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    if (currentStage === 0) {
+                        const rect = candleWrapper.getBoundingClientRect();
+                        const cx = rect.left + rect.width / 2;
+                        const cy = rect.top + 18;
+                        spawnRipple(cx, cy);
+                        spawnSparkles(cx, cy, 18);
+                        goToStage(1);
+                    } else {
+                        advanceStage({ clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 });
+                    }
+                }
+            });
+
+            console.log('%c🕯️  Joy\'s 30th Birthday Journey  🕯️',
+                'font-size:1.2em; color:#f0d078;');
+            console.log('%cTap the candle flame to begin the celebration.',
+                'color:#e8a0b4;');
+            console.log('%c💛 Each tap reveals a new chapter of your story.',
+                'color:#fdf0d0;');
+            console.log('%c🎵 Audio track suggestion: "Canon in D" (soft piano) — replace src in <audio> element.',
+                'color:#b8a0d4; font-style:italic;');
+        })();
+    </script>
+</body>
+</html>
